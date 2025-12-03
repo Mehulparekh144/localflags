@@ -1,0 +1,36 @@
+{
+  "name": "localflags",
+  "version": "1.0.2",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "localflags": "./bin/cli.cjs"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "repository": "git@github.com:Mehulparekh144/localflags.git",
+  "author": "Mehulparekh144 <mehulparekh144>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0"
+  },
+  "peerDependencies": {
+    "@prisma/client": ">=7"
+  },
+  "devDependencies": {
+    "@prisma/client": "^7.1.0",
+    "@types/node": "^24.10.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
