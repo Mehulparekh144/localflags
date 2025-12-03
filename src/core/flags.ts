@@ -1,15 +1,24 @@
-import type { PrismaClient } from "@prisma/client";
 import { evaluateFlag } from "./evaluate";
 
-export class LocalFlagsClient {
-  private prisma: PrismaClient;
+export class LocalFlagsClient<
+  TPrisma extends {
+    featureFlag: {
+      create: (args: any) => Promise<any>;
+      update: (args: any) => Promise<any>;
+      findUnique: (args: any) => Promise<any>;
+      findMany: (args?: any) => Promise<any>;
+      delete: (args: any) => Promise<any>;
+    };
+  }
+> {
+  private prisma: TPrisma;
 
   /**
    * Initializes the local flags
    * @param prisma Takes in a prisma client
-   * @returns Returns
+   * @returns Returns LocalFlagClient object
    */
-  constructor(prisma: PrismaClient) {
+  constructor(prisma: TPrisma) {
     this.prisma = prisma;
   }
 
@@ -18,18 +27,16 @@ export class LocalFlagsClient {
    * @param data Takes in a feature flag object
    * @returns Returns the created feature flag
    */
-  async createFlag(data: any): Promise<any> {
-    return await this.prisma.featureFlag.create({
-      data,
-    });
+  async createFlag(data: Record<string, any>): Promise<any> {
+    return this.prisma.featureFlag.create({ data });
   }
 
   /**
    * Returns all feature flags
    * @returns Returns all feature flags
    */
-  async getAllFlags(): Promise<any> {
-    return await this.prisma.featureFlag.findMany();
+  async getAllFlags(): Promise<any[]> {
+    return this.prisma.featureFlag.findMany();
   }
 
   /**
@@ -37,11 +44,9 @@ export class LocalFlagsClient {
    * @param name Takes in a feature flag name
    * @returns Returns the feature flag
    */
-  async getFlag(name: string): Promise<any> {
-    return await this.prisma.featureFlag.findUnique({
-      where: {
-        name,
-      },
+  async getFlag(name: string): Promise<any | null> {
+    return this.prisma.featureFlag.findUnique({
+      where: { name },
     });
   }
 
@@ -51,11 +56,9 @@ export class LocalFlagsClient {
    * @param data Takes in a feature flag object
    * @returns Returns the updated feature flag
    */
-  async updateFlag(id: string, data: any): Promise<any> {
-    return await this.prisma.featureFlag.update({
-      where: {
-        id,
-      },
+  async updateFlag(id: string, data: Record<string, any>): Promise<any> {
+    return this.prisma.featureFlag.update({
+      where: { id },
       data,
     });
   }
@@ -66,10 +69,8 @@ export class LocalFlagsClient {
    * @returns Returns the deleted feature flag
    */
   async deleteFlag(id: string): Promise<any> {
-    return await this.prisma.featureFlag.delete({
-      where: {
-        id,
-      },
+    return this.prisma.featureFlag.delete({
+      where: { id },
     });
   }
 
@@ -83,11 +84,11 @@ export class LocalFlagsClient {
   async isEnabled({
     flagName,
     userIdentifier,
-    userConditions,
+    userConditions = {},
   }: {
     flagName: string;
     userIdentifier: string;
-    userConditions: Record<string, any> | null;
+    userConditions?: Record<string, any>;
   }): Promise<boolean> {
     const flag = await this.getFlag(flagName);
     return evaluateFlag({

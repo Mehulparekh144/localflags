@@ -1,6 +1,6 @@
 {
   "name": "localflags",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,6 +19,7 @@
     "start": "tsx src/index.ts",
     "build": "tsc",
     "prepublishOnly": "npm run build",
+    "release": "npm run build && npm version patch -m \"chore(release): %s\" && npm publish --access public && git push origin main --tags",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
