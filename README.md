@@ -49,7 +49,7 @@ import { PrismaClient } from "@prisma/client";
 import { LocalFlagsClient } from "localflags";
 
 const prisma = new PrismaClient();
-export const flags = new LocalFlagsClient(prisma);
+export const localFlagsClient = new LocalFlagsClient(prisma);
 ```
 
 ### 2. Check a Flag
@@ -58,9 +58,9 @@ Use the `isEnabled` method to check if a feature should be active for a user.
 
 ```typescript
 // Inside a Server Component or API Route
-import { flags } from "@/lib/flags"; // adjust path as needed
+import { localFlagsClient } from "@/lib/flags"; // adjust path as needed
 
-const showNewFeature = await flags.isEnabled(
+const showNewFeature = await localFlagsClient.isEnabled(
   "new-checkout-flow",
   user.id, // Unique ID for user
   {
