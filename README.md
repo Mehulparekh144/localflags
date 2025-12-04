@@ -1,4 +1,6 @@
 # LocalFlags
+<img width="209" height="209" alt="logo" src="https://github.com/user-attachments/assets/e4b63d2d-1370-41e2-abbf-b4b94b541a1a" />
+
 
 > **Feature flags, simplified. Local-first, database-backed, and fully under your control.**
 
