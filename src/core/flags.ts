@@ -40,13 +40,13 @@ export class LocalFlagsClient<
   }
 
   /**
-   * Returns a feature flag by name
-   * @param name Takes in a feature flag name
+   * Returns a feature flag by id
+   * @param id Takes in a feature flag id
    * @returns Returns the feature flag
    */
-  async getFlag(name: string): Promise<any | null> {
+  async getFlag(id: string): Promise<any | null> {
     return this.prisma.featureFlag.findUnique({
-      where: { name },
+      where: { id },
     });
   }
 
@@ -81,15 +81,11 @@ export class LocalFlagsClient<
    * @param userConditions Takes in a user conditions. e.g. { role: "admin" } to check if that user has the admin role. Make sure it's an object
    * @returns Returns a boolean
    */
-  async isEnabled({
-    flagName,
-    userIdentifier,
-    userConditions = {},
-  }: {
-    flagName: string;
-    userIdentifier: string;
-    userConditions?: Record<string, any>;
-  }): Promise<boolean> {
+  async isEnabled(
+    flagName: string,
+    userIdentifier: string,
+    userConditions: Record<string, any>
+  ): Promise<boolean> {
     const flag = await this.getFlag(flagName);
     return evaluateFlag({
       flag,
