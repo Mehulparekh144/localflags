@@ -1,0 +1,35 @@
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "./generated/prisma"
+}
+
+datasource db {
+    provider = "sqlite"
+}
+
+model FeatureFlag {
+    id String @id @default(cuid())
+    name String @unique
+    description String
+    enabled Boolean @default(false)
+    rolloutPercentage Int @default(0)
+    users Json? // You can change it to whatever you want
+    conditions Json? // You can change it to whatever you want  
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+    
+
+model FeatureFlag {
+    id String @id @default(cuid())
+    name String @unique
+    description String
+    enabled Boolean @default(false)
+    rolloutPercentage Int @default(0)
+    users Json? // You can change it to whatever you want
+    conditions Json? // You can change it to whatever you want  
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

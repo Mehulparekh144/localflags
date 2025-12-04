@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import path from "node:path";
 import fs from "node:fs";
+import simpleGit from "simple-git";
 
 const SCHEMA_MODEL = `
 model FeatureFlag {
@@ -16,6 +17,35 @@ model FeatureFlag {
 }
 `;
 
+const DASHBOARD_TEMPLATE_GITHUB =
+  "https://github.com/Mehulparekh144/localflags-dashboard-template";
+
+const createDashboard = async () => {
+  if (fs.existsSync(path.join(process.cwd(), "src/app"))) {
+    simpleGit().clone(
+      DASHBOARD_TEMPLATE_GITHUB,
+      path.join(process.cwd(), "src", "app", "localflags")
+    );
+    console.log(
+      chalk.green(
+        "Dashboard created successfully in src/app/localflags-dashboard-template"
+      )
+    );
+    return;
+  } else if (fs.existsSync(path.join(process.cwd(), "app"))) {
+    simpleGit().clone(
+      DASHBOARD_TEMPLATE_GITHUB,
+      path.join(process.cwd(), "app", "localflags")
+    );
+    console.log(
+      chalk.green("Dashboard created successfully in app/localflags")
+    );
+    return;
+  }
+
+  console.log(chalk.red("No app directory found. Skipping dashboard creation"));
+};
+
 export async function init() {
   console.log(chalk.green("Initializing localflags..."));
   const schemaPath = path.join(process.cwd(), "prisma", "schema.prisma");
@@ -26,11 +56,10 @@ export async function init() {
 
     if (schemaContent.includes("FeatureFlag")) {
       console.log(chalk.yellow("FeatureFlag model already exists"));
-      return;
+    } else {
+      fs.writeFileSync(schemaPath, schemaContent + "\n" + SCHEMA_MODEL);
+      console.log(chalk.green("FeatureFlag model added successfully"));
     }
-
-    fs.writeFileSync(schemaPath, schemaContent + "\n" + SCHEMA_MODEL);
-    console.log(chalk.green("FeatureFlag model added successfully"));
   } else {
     console.log(chalk.yellow("Schema does not exist. Creating schema..."));
     const SCHEMA_SETUP = `
@@ -49,9 +78,12 @@ ${SCHEMA_MODEL}
     console.log(chalk.green("Schema created successfully"));
   }
 
+  createDashboard();
+
   const NEXT_STEPS = `
   ${chalk.cyan("Next Steps: ")}
     Run npx prisma generate
+    Run npx prisma migrate dev
     `;
   console.log(NEXT_STEPS);
 }
