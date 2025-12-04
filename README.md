@@ -1,4 +1,4 @@
-# 🚩 LocalFlags
+# LocalFlags
 
 > **Feature flags, simplified. Local-first, database-backed, and fully under your control.**
 
@@ -34,13 +34,6 @@ Initialize `localflags` in your project. This command will automatically update 
 npx localflags init
 ```
 
-After initialization, run the following commands to update your database:
-
-```bash
-npx prisma generate
-npx prisma migrate dev
-```
-
 > **Note:** The dashboard will be created at `/app/localflags` or `/src/app/localflags`. Ensure you have Shadcn UI components installed for it to render correctly.
 
 ## 📖 Usage
@@ -67,7 +60,7 @@ import { flags } from "@/lib/flags"; // adjust path as needed
 
 const showNewFeature = await flags.isEnabled(
   "new-checkout-flow",
-  user.id, // Unique ID for percentage rollouts
+  user.id, // Unique ID for user
   {
     email: user.email,
     role: user.role, // e.g. "admin"
