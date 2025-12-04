@@ -65,14 +65,14 @@ Use the `isEnabled` method to check if a feature should be active for a user.
 // Inside a Server Component or API Route
 import { flags } from "@/lib/flags"; // adjust path as needed
 
-const showNewFeature = await flags.isEnabled({
-  flagName: "new-checkout-flow",
-  userIdentifier: user.id, // Unique ID for percentage rollouts
-  userConditions: {
+const showNewFeature = await flags.isEnabled(
+  "new-checkout-flow",
+  user.id, // Unique ID for percentage rollouts
+  {
     email: user.email,
     role: user.role, // e.g. "admin"
   },
-});
+);
 
 if (showNewFeature) {
   // Render new feature
